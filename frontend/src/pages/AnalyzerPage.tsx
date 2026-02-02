@@ -1,41 +1,137 @@
 import { useState } from "react";
 import { analyzeCode } from "../api/analyzer";
 import type { AnalysisResult } from "../types/analysis";
+import { Shield, Search, Loader2, Trash2, Sparkles } from "lucide-react";
 
 import CodeEditor from "../components/CodeEditor";
 import VulnerabilityList from "../components/VulnerabilityList";
 import ExplanationPanel from "../components/ExplanationPanel";
+import Toast from "../components/Toast";
+
+import styles from "./AnalyzerPage.module.css";
+
+interface ToastMessage {
+  id: number;
+  type: "success" | "error" | "info";
+  message: string;
+}
 
 export default function AnalyzerPage() {
   const [code, setCode] = useState("");
   const [results, setResults] = useState<AnalysisResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  const addToast = (message: string, type: "success" | "error" | "info" = "info") => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, type, message }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4000);
+  };
+
+  const removeToast = (id: number) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
 
   async function handleAnalyze() {
+    if (!code.trim()) {
+      addToast("Please enter code to analyze", "error");
+      return;
+    }
+
     setLoading(true);
     try {
       const data = await analyzeCode(code);
       setResults(data.results);
+
+      if (data.results.length === 0) {
+        addToast("No vulnerabilities detected!", "success");
+      } else {
+        addToast(`Found ${data.results.length} vulnerability(ies)`, "info");
+      }
     } catch (err) {
-      alert("Analysis failed");
+      addToast("Analysis failed. Please try again.", "error");
+      console.error(err);
     } finally {
       setLoading(false);
     }
   }
 
+  const handleClear = () => {
+    setCode("");
+    setResults([]);
+    addToast("Code cleared", "info");
+  };
+
   return (
-    <div style={{ padding: "1.5rem" }}>
-      <h1>Secure Code Review AI</h1>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.headerContent}>
+          <div className={styles.logo}>
+            <Shield size={40} className={styles.logoIcon} />
+            <h1>SecureCodeRAG</h1>
+          </div>
+          <p className={styles.subtitle}>
+            AI-Powered Security Code Review with RAG
+          </p>
+        </div>
+      </div>
 
-      <CodeEditor value={code} onChange={setCode} />
+      <div className={styles.mainContent}>
+        <CodeEditor value={code} onChange={setCode} />
 
-      <button onClick={handleAnalyze} disabled={loading}>
-        {loading ? "Analyzing..." : "Analyze Code"}
-      </button>
+        <div className={styles.controls}>
+          <button
+            onClick={handleAnalyze}
+            disabled={loading || !code.trim()}
+            className={styles.analyzeBtn}
+          >
+            {loading ? (
+              <>
+                <Loader2 size={18} className={styles.spinner} /> Analyzing...
+              </>
+            ) : (
+              <>
+                <Search size={18} /> Analyze Code
+              </>
+            )}
+          </button>
 
-      <VulnerabilityList results={results} />
+          <button
+            onClick={handleClear}
+            disabled={loading || !code.trim()}
+            className={styles.clearBtn}
+          >
+            <Trash2 size={18} /> Clear
+          </button>
+        </div>
 
-      <ExplanationPanel results={results} />
+        {results.length > 0 && (
+          <div className={styles.resultsSection}>
+            <VulnerabilityList results={results} />
+            <ExplanationPanel results={results} />
+          </div>
+        )}
+
+        {results.length === 0 && !loading && code.trim() && (
+          <div className={styles.emptyState}>
+            <Sparkles size={24} />
+            <p>Click "Analyze Code" to get started</p>
+          </div>
+        )}
+      </div>
+
+      <div className={styles.toastContainer}>
+        {toasts.map((toast) => (
+          <Toast
+            key={toast.id}
+            message={toast.message}
+            type={toast.type}
+            onClose={() => removeToast(toast.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 }

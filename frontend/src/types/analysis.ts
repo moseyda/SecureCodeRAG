@@ -7,19 +7,23 @@ export interface Vulnerability {
 
 export interface Confidence {
   score: number;
-  level: "High" | "Medium" | "Low";
+  level: "Critical" | "High" | "Medium" | "Low";
+}
+
+export interface VulnerabilityMetadata {
+  severity?: "Critical" | "High" | "Medium" | "Low";
+  category?: string;
+  cwe?: string;
+  owasp?: string;
+  description?: string;
 }
 
 export interface AnalysisResult {
   vulnerability: Vulnerability;
-  metadata?: {
-    owasp?: string;
-    cwe?: string;
-    description?: string;
-  };
+  metadata?: VulnerabilityMetadata;
   confidence: Confidence;
   explanation: string;
-  sources: Record<string, any>[];
+  sources: Array<{ source: string; [key: string]: any }>;
 }
 
 export interface AnalysisResponse {
