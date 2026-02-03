@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { analyzeCode } from "../api/analyzer";
 import type { AnalysisResult } from "../types/analysis";
-import { Shield, Search, Loader2, Trash2, Sparkles } from "lucide-react";
+import { Shield, Search, Loader2, Trash2, Sparkles, ShieldCheck } from "lucide-react";
 
 import CodeEditor from "../components/CodeEditor";
-import VulnerabilityList from "../components/VulnerabilityList";
-import ExplanationPanel from "../components/ExplanationPanel";
+import Modal from "../components/Modal";
+import AnalysisResults from "../components/AnalysisResults";
 import Toast from "../components/Toast";
 
 import styles from "./AnalyzerPage.module.css";
@@ -20,6 +20,7 @@ export default function AnalyzerPage() {
   const [code, setCode] = useState("");
   const [results, setResults] = useState<AnalysisResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   const addToast = (message: string, type: "success" | "error" | "info" = "info") => {
@@ -41,6 +42,9 @@ export default function AnalyzerPage() {
     }
 
     setLoading(true);
+    setIsModalOpen(true);
+    setResults([]);
+
     try {
       const data = await analyzeCode(code);
       setResults(data.results);
@@ -52,6 +56,7 @@ export default function AnalyzerPage() {
       }
     } catch (err) {
       addToast("Analysis failed. Please try again.", "error");
+      setIsModalOpen(false);
       console.error(err);
     } finally {
       setLoading(false);
@@ -62,6 +67,12 @@ export default function AnalyzerPage() {
     setCode("");
     setResults([]);
     addToast("Code cleared", "info");
+  };
+
+  const handleCloseModal = () => {
+    if (!loading) {
+      setIsModalOpen(false);
+    }
   };
 
   return (
@@ -106,21 +117,16 @@ export default function AnalyzerPage() {
             <Trash2 size={18} /> Clear
           </button>
         </div>
-
-        {results.length > 0 && (
-          <div className={styles.resultsSection}>
-            <VulnerabilityList results={results} />
-            <ExplanationPanel results={results} />
-          </div>
-        )}
-
-        {results.length === 0 && !loading && code.trim() && (
-          <div className={styles.emptyState}>
-            <Sparkles size={24} />
-            <p>Click "Analyze Code" to get started</p>
-          </div>
-        )}
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title="Security Analysis Results"
+        icon={<ShieldCheck size={24} />}
+      >
+        <AnalysisResults results={results} isLoading={loading} />
+      </Modal>
 
       <div className={styles.toastContainer}>
         {toasts.map((toast) => (
