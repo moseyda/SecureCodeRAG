@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { analyzeCode } from "../api/analyzer";
 import type { AnalysisResult } from "../types/analysis";
-import { Shield, Search, Loader2, Trash2, Sparkles, ShieldCheck } from "lucide-react";
+import { Shield, Search, Loader2, Trash2, ShieldCheck } from "lucide-react";
 
 import CodeEditor from "../components/CodeEditor";
 import Modal from "../components/Modal";

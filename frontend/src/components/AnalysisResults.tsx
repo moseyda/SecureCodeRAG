@@ -38,10 +38,11 @@ export default function AnalysisResults({ results, isLoading }: Props) {
     );
   }
 
-  const criticalCount = results.filter(r => r.metadata?.severity?.toLowerCase() === "critical").length;
-  const highCount = results.filter(r => r.metadata?.severity?.toLowerCase() === "high").length;
-  const mediumCount = results.filter(r => r.metadata?.severity?.toLowerCase() === "medium").length;
-  const lowCount = results.filter(r => r.metadata?.severity?.toLowerCase() === "low").length;
+  const criticalCount = results.filter(r => r.confidence.level === "Critical").length;
+  const highCount = results.filter(r => r.confidence.level === "High").length;
+  const mediumCount = results.filter(r => r.confidence.level === "Medium").length;
+  const lowCount = results.filter(r => r.confidence.level === "Low").length;
+
 
   return (
     <div className={styles.container}>
