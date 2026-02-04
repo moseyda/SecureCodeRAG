@@ -1,11 +1,13 @@
 import os
 from app.core.config import settings
+from typing import Optional
+
 
 # Try to import ChatOpenAI if available
 try:
     from langchain_openai import ChatOpenAI
 except ImportError:
-    ChatOpenAI = None
+    ChatOpenAI: Optional[type] = None
 
 # Dummy LLM for testing
 class DummyLLM:
