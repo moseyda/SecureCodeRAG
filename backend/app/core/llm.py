@@ -18,11 +18,12 @@ class DummyLLM:
     
     def invoke(self, messages, **kwargs):
         """LangChain LCEL compatibility"""
-        if isinstance(messages, list):
-            text = str(messages)
-        else:
-            text = str(messages)
-        return type('Response', (), {'content': f"Dummy explanation for the security issue found in the code."})()
+        text = str(messages)  # use this everywhere
+        return type(
+            'Response',
+            (),
+            {'content': f"Dummy explanation for the security issue found in the code. Context: {text[:100]}..."}
+        )()
 
 def get_llm():
     # If OPENAI_API_KEY exists and ChatOpenAI is available, use real LLM
