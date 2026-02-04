@@ -1,7 +1,5 @@
 import os
 from app.core.config import settings
-from typing import Optional
-
 
 # Try to import ChatOpenAI if available
 try:
