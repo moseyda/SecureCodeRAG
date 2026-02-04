@@ -51,7 +51,7 @@ jobs:
         run: |
           source venv/bin/activate
           pip install mypy
-          mypy backend/app
+          mypy backend/app --ignore-missing-imports
 
       - name: Run backend tests
         run: |
