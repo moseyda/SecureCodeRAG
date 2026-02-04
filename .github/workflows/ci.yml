@@ -34,13 +34,23 @@ jobs:
           pip install --upgrade pip
           pip install -r backend/requirements.txt
 
-      - name: Auto-format backend with Black
+      - name: Lint backend
         run: |
           source venv/bin/activate
-          pip install black flake8 mypy
-          # Auto-fix style issues
+          pip install flake8
+          # Allow longer lines to match Black formatting
+          flake8 backend/app --max-line-length=88
+
+      - name: Format backend code (Black)
+        run: |
+          source venv/bin/activate
+          pip install black
           black backend/app
-          flake8 backend/app
+
+      - name: Type check backend
+        run: |
+          source venv/bin/activate
+          pip install mypy
           mypy backend/app
 
       - name: Run backend tests
@@ -81,12 +91,11 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
 
-      - name: Auto-format frontend with Prettier & Lint
-        run: |
-          # Auto-fix formatting issues
-          npx prettier --write "src/**/*.ts" "src/**/*.tsx"
-          npx eslint ./src --fix
-          npx tsc --noEmit
+      - name: Lint frontend
+        run: npx eslint ./src --max-warnings=0
+
+      - name: Type check frontend
+        run: npx tsc --noEmit
 
       - name: Run frontend tests
         run: npm test -- --watchAll=false || echo "No frontend tests defined"
