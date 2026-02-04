@@ -87,7 +87,7 @@ SecureCodeRAG is a hybrid security analysis tool that combines static code analy
    EMBEDDING_MODEL=text-embedding-3-small
    ```
 
-5. **Initialize vector store (one-time):**
+5. **Initialise vector store (one-time):**
    ```bash
    python -m app.vectorstore.ingest
    ```
@@ -121,11 +121,17 @@ SecureCodeRAG is a hybrid security analysis tool that combines static code analy
    ```
 
 ---
+## CI/CD and Docker
+* Continuous Integration (CI) is set up via GitHub Actions to automatically lint, type-check, and test both backend and frontend on pushes and pull requests.
+
+* Continuous Deployment (CD) will be added once the project is finalised and ready for production.
+
+* Docker files exist for backend and frontend to enable future containerised builds. The project is not yet fully dockerised or composed, so you can continue development locally without affecting workflows.
 
 ## Usage
 
 1. **Paste your code** into the editor
-2. **Click "Analyze Code"**
+2. **Click "Analyse Code"**
 3. **Review detected vulnerabilities** with:
    - Line number and code snippet
    - Severity and confidence score
@@ -195,7 +201,7 @@ The system includes a **DummyLLM** for testing without an API key:
 | SQL Injection | String concatenation in queries | A03:2021 |
 | Command Injection | `os.system()`, `exec()`, `eval()` | A03:2021 |
 | XSS | `innerHTML`, `document.write()` | A07:2021 |
-| Path Traversal | Unsanitized file paths | A01:2021 |
+| Path Traversal | Unsanitised file paths | A01:2021 |
 
 *More patterns can be added in `backend/app/security/static_scan.py`*
 
