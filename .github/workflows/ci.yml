@@ -34,6 +34,13 @@ jobs:
           pip install --upgrade pip
           pip install -r backend/requirements.txt
 
+      - name: Format backend code (Black)
+        run: |
+          source venv/bin/activate
+          pip install black
+          black backend/app
+
+
       - name: Lint backend
         run: |
           source venv/bin/activate
@@ -41,11 +48,6 @@ jobs:
           # Allow longer lines to match Black formatting
           flake8 backend/app --max-line-length=88
 
-      - name: Format backend code (Black)
-        run: |
-          source venv/bin/activate
-          pip install black
-          black backend/app
 
       - name: Type check backend
         run: |
