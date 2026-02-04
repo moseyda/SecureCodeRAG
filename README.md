@@ -205,25 +205,56 @@ The system includes a **DummyLLM** for testing without an API key:
 
 ```
 SecureCodeRAG/
-├── backend/
-│   ├── app/
-│   │   ├── api/           # API endpoints
-│   │   ├── core/          # LLM, embeddings, config
-│   │   ├── rag/           # RAG generator & retriever
-│   │   ├── schemas/       # Request/response models
-│   │   ├── security/      # Static analysis engine
-│   │   └── vectorstore/   # FAISS index management
-│   ├── data/              # OWASP documentation
-│   ├── vectorstore/       # FAISS index files
-│   └── requirements.txt
-│
-└── frontend/
-    ├── src/
-    │   ├── api/           # Backend communication
-    │   ├── components/    # React components
-    │   ├── pages/         # Main pages
-    │   └── types/         # TypeScript types
-    └── package.json
+├─ .github/
+│  └─ workflows/
+│     └─ ci.yml
+├─ backend/
+│  ├─ app/
+│  │  ├─ api/
+│  │  │  └─ analyze.py
+│  │  ├─ core/
+│  │  │  ├─ config.py
+│  │  │  ├─ embeddings.py
+│  │  │  └─ llm.py
+│  │  ├─ rag/
+│  │  │  ├─ generator.py
+│  │  │  ├─ prompts.py
+│  │  │  └─ retriever.py
+│  │  ├─ schemas/
+│  │  │  ├─ request.py
+│  │  │  └─ response.py
+│  │  ├─ security/
+│  │  │  ├─ confidence.py
+│  │  │  ├─ static_scan.py
+│  │  │  └─ vulnerability_map.py
+│  │  └─ main.py
+│  ├─ data/
+│  │  └─ owasp_docs/
+│  │     ├─ A01_Broken_Authentication.txt
+│  │     ├─ A02_Cryptographic_Failures.txt
+│  │     ├─ A03_SQL_Injection.txt
+│  │     ├─ A05_Broken_Access_Control.txt
+│  │     └─ A07_XSS.txt
+│  ├─ Dockerfile
+│  └─ requirements.txt
+├─ frontend/
+│  ├─ public/
+│  │  └─ vite.svg
+│  ├─ src/
+│  │  ├─ api/
+│  │  │  └─ analyzer.ts
+│  │  ├─ assets/
+│  │  │  └─ react.svg
+│  │  ├─ components/
+│  │  ├─ pages/
+│  │  └─ types/
+│  ├─ Dockerfile
+│  ├─ nginx.conf
+│  ├─ package.json
+│  └─ package-lock.json
+├─ docker-compose.yml
+└─ README.md
+
 ```
 
 ---
