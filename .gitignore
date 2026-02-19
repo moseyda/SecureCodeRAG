@@ -8,6 +8,7 @@ __pycache__/
 *.so
 
 # Virtual environments
+backend/venv/
 venv/
 env/
 ENV/
