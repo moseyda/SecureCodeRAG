@@ -37,5 +37,4 @@ class ExplanationGenerator:
             response = self.llm.invoke(prompt)
             return response.content if hasattr(response, 'content') else str(response)
         except Exception as e:
-            # RETURN THE ACTUAL ERROR FOR DEBUGGING
             return f"Error generating explanation: {str(e)}"

@@ -2,11 +2,9 @@ export interface AnalysisResult {
   type: string;
   severity: string;
   line: number;
-  code: string; // Backend sends 'code', was mapped to 'snippet' conceptually
+  code: string;
   explanation: string;
-  confidence: number; // Backend sends a float/number, not an object
-  // output from backend does not include 'metadata' or 'sources' objects as per previous interface
-  // explicitly adding optional fields if they might be added later or to avoid strict breaking if backend changes partially
+  confidence: number;
   cwe?: string;
   owasp?: string;
   category?: string;

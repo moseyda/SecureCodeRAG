@@ -1,7 +1,6 @@
 import os
 from app.core.config import settings
 
-# Try to import Gemini if available
 try:
     from langchain_google_genai import ChatGoogleGenerativeAI
 except ImportError:
