@@ -5,6 +5,17 @@
 SecureCodeRAG is a hybrid security analysis tool that combines static code analysis with RAG (Retrieval-Augmented Generation) to detect vulnerabilities and provide AI-powered explanations with security best practices.
 
 ---
+## Problem Statement & Engineering Intent (Spec)
+
+**The Problem:** Traditional static code analyzers flag vulnerabilities but fail to teach developers how to fix them. Conversely, purely prompting an LLM for code fixes often leads to hallucinations or non-standard security advice.
+
+**The Intent:** Build a hybrid, production-ready tool that bridges this gap. The system must:
+1. Use static analysis for fast, deterministic vulnerability detection.
+2. Use Retrieval-Augmented Generation (RAG) to ground AI explanations strictly in official OWASP documentation.
+3. Be built with a modern, type-safe stack (**TypeScript/React** frontend, **Python/FastAPI** backend).
+4. Be designed for cloud-native deployment with **Docker** containerisation and automated **CI/CD** pipelines.
+
+This intent-first approach ensures the AI acts as a reliable educational tool rather than a black box, while the underlying architecture mirrors modern, containerised enterprise applications.
 
 ## Features
 
